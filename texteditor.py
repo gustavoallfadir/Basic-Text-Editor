@@ -11,6 +11,7 @@ fondoVar="white"
 fuenteVar="black"
 colormenu="#0B0B3B"
 fuentemenu="white"
+colorcursor="black"
 
 #----------------------Root-------------------------
 def iniciar():
@@ -64,11 +65,14 @@ def iniciar():
         global fondoVar
         global fuentemenu
         global colormenu
+        global colorcursor
 
         fondoVar="white"
         fuenteVar="black"
         colormenu="#0B0B3B"
         fuentemenu="white"
+        colorcursor="blue"
+
 
         root.destroy()
         iniciar()
@@ -78,14 +82,34 @@ def iniciar():
         global fondoVar
         global fuentemenu
         global colormenu
+        global colorcursor
 
         fondoVar="black"
         fuenteVar="white"
         colormenu="black"
         fuentemenu="#2AEF0A"
+        colorcursor="white"
         
         root.destroy()
         iniciar()
+
+
+    def Mskin():
+        global fuenteVar
+        global fondoVar
+        global fuentemenu
+        global colormenu
+        global colorcursor
+
+        fondoVar="black"
+        fuenteVar="#2AEF0A"
+        colormenu="black"
+        fuentemenu="white"
+        colorcursor="white"
+        
+        root.destroy()
+        iniciar()
+
 
     def salir():
         root.destroy()
@@ -111,6 +135,7 @@ def iniciar():
     menuSkin=Menu(barramenu,tearoff=0,fg=fuentemenu,bg=colormenu)
     menuSkin.add_command(label="Colores claros", command=lambda:Lskin())
     menuSkin.add_command(label="Colores oscuros", command=lambda:Dskin())
+    menuSkin.add_command(label="Colores Matrix",command=lambda:Mskin())
 
     menuayuda=Menu(barramenu,tearoff=0, fg=fuentemenu, bg=colormenu)
     menuayuda.add_command(label="Acerca de...     ", command=acerca_de)
@@ -119,10 +144,33 @@ def iniciar():
     barramenu.add_cascade(label="Color del editor ",menu=menuSkin)
     barramenu.add_cascade(label="Ayuda   ",menu=menuayuda)
 
+    #---------Menu click derecho-----------------------
+
+
+    def make_menu(w):
+        global the_menu
+        the_menu = Menu(w, tearoff=0)
+        the_menu.add_command(label="Cortar  ")
+        the_menu.add_command(label="Copiar  ")
+        the_menu.add_command(label="Pegar  ")
+    
+    make_menu(root)
+
+    def show_menu(e):
+        w = e.widget
+        the_menu.entryconfigure("Cortar  ",
+        command=lambda: w.event_generate("<<Cut>>"))
+        the_menu.entryconfigure("Copiar  ",
+        command=lambda: w.event_generate("<<Copy>>"))
+        the_menu.entryconfigure("Pegar  ",
+        command=lambda: w.event_generate("<<Paste>>"))
+        the_menu.tk.call("tk_popup", the_menu, e.x_root, e.y_root)
+
 
     #-------------Caja de texto-----------------------------
 
-    textBox=Text(frame,width=30,height=10,wrap="none",font=10, fg=fuenteVar,bg=fondoVar)
+    textBox=Text(frame,width=30,height=10,wrap="none",font="14",insertbackground=colorcursor, fg=fuenteVar,bg=fondoVar)
+    textBox.configure(font=("Courier 10 Pitch", 14))
     textBox.pack(side="top",fill="both",expand="true")
 
     scrollx=Scrollbar(frame, command=textBox.xview,width=15,orient="horizontal") 
@@ -135,6 +183,8 @@ def iniciar():
     scrolly.pack(side="left",fill="y")
 
     textBox.config(xscrollcommand=scrollx.set, yscrollcommand=scrolly.set)
+    textBox.bind("<Button-3><ButtonRelease-3>", show_menu)
+
 
 iniciar()
 
