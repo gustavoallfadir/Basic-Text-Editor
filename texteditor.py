@@ -1,8 +1,12 @@
-from tkinter import *
-from tkinter import filedialog
-from tkinter import messagebox
 import os
 import sys
+
+from tkinter import *
+
+from tkinter import filedialog,
+messagebox
+
+
 
 
 #---------------------  Skin--------------------------
@@ -52,7 +56,8 @@ def iniciar():
     def guardar():
         temp=textBox.get(1.0,END)
         
-        file=filedialog.asksaveasfilename(filetypes =[('Archivo de texto', '*.txt')])
+        file=filedialog.asksaveasfilename(filetypes =[('Archivo de texto', '*.txt')
+        ])
 
         target=open(file, "w")
         
